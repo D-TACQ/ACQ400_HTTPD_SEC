@@ -72,9 +72,9 @@ SSL_CA_POPUP_LINK=${SSL_CA_POPUP_LINK:-https://www.d-tacq.com/acq400_ssl.shtml}
 sed -i "s|CA_LINK_PLACEHOLDER|$SSL_CA_POPUP_LINK|" /var/www/d-tacq/scripts/scripts.js
 
 #activate key and cert from nv location
-non_volatile=/mnt/local/sysconfig/ssl
-nv_cert=${non_volatile}/$(hostname).crt
-nv_key=${non_volatile}/$(hostname).key
+non_volatile=/mnt/local/sysconfig
+nv_cert=${non_volatile}/ssl/$(hostname).crt
+nv_key=${non_volatile}/ssl/$(hostname).key
 
 active_cert=/etc/nginx/certificate.crt
 active_key=/etc/nginx/private.key
@@ -86,19 +86,31 @@ if [ -e $nv_cert ] && [ -e $nv_key ]; then
 else
 	case $SSL_MODE in
 	ON|FORCE)
-		ls -l $non_volatile
+		ls -l $non_volatile/ssl
 		echo "ERROR SSL_MODE $SSL_MODE selected, but we do not have key and cert";;
 	*)
 		;;
 	esac
 fi
 
+#link auth file if exists
+nv_auth=${non_volatile}/auth
+active_auth=/etc/nginx/auth
+if [ -e $nv_auth ]; then
+	ln -s $nv_auth $active_auth
+fi
+
 #start nginx with correct conf
 if [ "$SSL_MODE" = "FORCE" ] && [ -e $active_key ]; then
-	echo "starting nginx ssl forced"
-	nginx -c /etc/nginx/nginx_ssl_forced.conf
+	if [ "$WEB_AUTH" = "ON" ] && [ -e $active_auth ]; then
+		echo "starting nginx + ssl + forced + auth"
+		nginx -c /etc/nginx/nginx_ssl_forced_auth.conf
+	else
+		echo "starting nginx + ssl + forced"
+		nginx -c /etc/nginx/nginx_ssl_forced.conf
+	fi
 elif [ "$SSL_MODE" = "ON" ] && [ -e $active_key ]; then
-	echo "starting nginx ssl"
+	echo "starting nginx + ssl"
 	nginx -c /etc/nginx/nginx_ssl.conf
 else
 	echo "starting nginx"
