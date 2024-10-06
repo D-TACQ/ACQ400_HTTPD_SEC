@@ -2,7 +2,7 @@
 #
 DC=$(shell date +%y%m%d%H%M)
 SEQ=20
-
+PN=httpd_sec
 
 package:
 	rm -Rf opkg/usr/local/*
@@ -12,9 +12,9 @@ package:
 	cp -av www/* opkg/usr/local/var/www
 	cp -av etc/* opkg/etc
 	mkdir -p release
-	tar czf release/$(SEQ)-httpd-$(DC).tgz -C opkg .
-	@echo Created release/$(SEQ)-httpd-$(DC).tgz
+	tar czf release/$(SEQ)-$(PN)-$(DC).tgz -C opkg .
+	@echo Created release/$(SEQ)-$(PN)-$(DC).tgz
 	rm -f ../PACKAGES/$(SEQ)-httpd*
-	cp release/$(SEQ)-httpd-$(DC).tgz ../PACKAGES/
+	cp release/$(SEQ)-$(PN)-$(DC).tgz ../PACKAGES/
 
 
