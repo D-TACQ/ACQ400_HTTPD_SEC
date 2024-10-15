@@ -2,13 +2,15 @@
 
 import os
 import time
-from jinja2 import Environment, FileSystemLoader
+from jinja2 import Template
 
 template_file='/etc/nginx/nginx.conf.j2'
 output_file='/etc/nginx/nginx.conf'
 
-env = Environment(loader=FileSystemLoader('.'))
-template = env.get_template(template_file)
+with open(template_file, 'r') as f:
+    template_content = f.read()
+
+template = Template(template_content)
 
 context = {
         "SSL_MODE": os.getenv('SSL_MODE', 'OFF'), #OFF, ON, FORCE
