@@ -15,6 +15,6 @@ package:
 	tar czf release/$(SEQ)-$(PN)-$(DC).tgz -C opkg .
 	@echo Created release/$(SEQ)-$(PN)-$(DC).tgz
 	rm -f ../PACKAGES/$(SEQ)-httpd*
-	cp release/$(SEQ)-$(PN)-$(DC).tgz ../PACKAGES/
+	cp release/$(SEQ)-$(PN)-$(DC).tgz ../PACKAGES.OPT/
 
 

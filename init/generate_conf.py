@@ -13,8 +13,8 @@ with open(template_file, 'r') as f:
 template = Template(template_content)
 
 context = {
-        "SSL_MODE": os.getenv('SSL_MODE', 'OFF'), #OFF, ON, FORCE
-        "WEB_AUTH": os.getenv('WEB_AUTH', 'OFF'), #OFF, ON
+        "SSL_MODE": os.getenv('SSL_MODE', 'FORCE'), #OFF, ON, FORCE
+        "WEB_AUTH": os.getenv('WEB_AUTH', 'ON'), #OFF, ON
         "WR_ENABLED": bool(os.getenv('WR_ENABLED', 'NO') == 'YES'), #NO, YES
         "timestamp": time.strftime("%d %b %y %H:%M"),
 }
