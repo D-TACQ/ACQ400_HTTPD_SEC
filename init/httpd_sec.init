@@ -93,11 +93,11 @@ else
 	esac
 fi
 
-#link auth file if exists
+#overwrite default auth file if custom auth exists
 nv_auth=${non_volatile}/auth
 active_auth=/etc/nginx/auth
 if [ -e $nv_auth ]; then
-	ln -s $nv_auth $active_auth
+	ln -sf $nv_auth $active_auth
 fi
 
 #start nginx with correct conf
